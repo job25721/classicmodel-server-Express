@@ -75,7 +75,25 @@ router.post("/addCart", function(req, res, next) {
     })
 });
 
+router.delete('/removeCartItem/:code',function(req,res,next){
+    var key = req.params.code;
+    var len = req.session.cartItem.length
+    var targetIndex = undefined;
+    for(let i=0 ;i<len ;i++){
+        if(req.session.cartItem[i].code == key) targetIndex = i
+    }
+    var currentAmount =  parseInt(req.session.totalQuantitiy) - parseInt(req.session.cartItem[targetIndex].Quantity)
+    req.session.totalQuantitiy = currentAmount
+    console.log(req.session.totalQuantitiy );
+    
+    req.session.cartItem.splice(targetIndex,1)
+    res.json({update:currentAmount})
+
+})
+
 router.get('/getCartItem',function(req,res,next){
+    if(req.session.cartItem === undefined ) req.session.cartItem = []
+    if(req.session.totalQuantitiy === undefined) req.session.totalQuantitiy = 0
     res.json({
         cartItem : req.session.cartItem,
         total : req.session.totalQuantitiy
