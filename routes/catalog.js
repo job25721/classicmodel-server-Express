@@ -21,9 +21,7 @@ router.get('/fetchPopUp/:productCode',function (req,res,next) {
 })
 router.get('/getData',function (req,res,next) {
         var scale = req.query.scale;
-        var vendor = req.query.vendor; 
-        console.log(scale);
-        
+        var vendor = req.query.vendor;         
         if ((scale === undefined && vendor === undefined) || (scale === "All" && vendor === "All")) {
             Database.query('SELECT * FROM `products` JOIN `productlines` USING (productLine)', function (err, result, fields) {
 

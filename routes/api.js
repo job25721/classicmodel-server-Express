@@ -15,14 +15,14 @@ router.get("/user", function(req, res, next) {
     );
   }else res.end()
 });
-
 router.get("/authenCheck",function (req,res,next) {
   if(req.session.loggedin) res.json({"login":true})
   else res.json({"login":false})
 })
 
 router.post("/auth", function(req, res, next) {
-  const { username, password } = req.body.user;
+  var { username, password } = req.body.user;
+   
   Database.query(
     "SELECT pswd FROM users WHERE employeeNumber = " + parseInt(username),
     (err, data) => {
