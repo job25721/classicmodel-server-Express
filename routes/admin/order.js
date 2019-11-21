@@ -18,6 +18,7 @@ router.get('/changepage/:init', function(req, res, next) {
 
 router.get('/update/:value/:orderNumber', function(req, res, next) {
     var value = req.params.value
+    console.log(value);
     var orderNumber = req.params.orderNumber
     Database.query(`update orders set status="${value}" where orderNumber=${orderNumber}`)
 })
