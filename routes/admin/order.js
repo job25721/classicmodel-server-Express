@@ -18,9 +18,15 @@ router.get('/changepage/:init', function(req, res, next) {
 
 router.get('/update/:value/:orderNumber', function(req, res, next) {
     var value = req.params.value
-    console.log(value);
     var orderNumber = req.params.orderNumber
     Database.query(`update orders set status="${value}" where orderNumber=${orderNumber}`)
+})
+
+router.get('/detail/:orderNumber', function(req, res, next) {
+    var orderNumber = req.params.orderNumber
+    Database.query(`select * from orders join orderdetails using (orderNumber) where orderNumber = ${orderNumber}`, function(err, data) {
+        res.json(data)
+    })
 })
 
 module.exports = router;
