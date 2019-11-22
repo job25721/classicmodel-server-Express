@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const Database = require("../../config/database");
 
-router.get('/orderdetail', function(req, res, next) {
+router.get('/fetch', function(req, res, next) {
     Database.query(`select * from orders`, function(err, data) {
         console.log(data.length);
 
