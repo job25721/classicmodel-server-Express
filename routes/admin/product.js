@@ -100,13 +100,6 @@ router.get('/getCartItem',function(req,res,next){
     })
 })
 
-router.get("/orderStatus", function(req, res, next) {
-  Database.query(
-    "select DATE_FORMAT(orderDate,'%m-%d-%Y') as orderDate,DATE_FORMAT(requiredDate,'%m-%d-%Y') as requiredDate , DATE_FORMAT(shippedDate,'%m-%d-%Y') as shippedDate,orderNumber,status,customerNumber  from orders",
-    function(err, data) {
-      res.json(data);
-    }
-  );
-});
-
 module.exports = router;
+
+
