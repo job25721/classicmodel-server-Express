@@ -52,6 +52,8 @@ router.post("/auth", function(req, res, next) {
   );
 });
 
+
+
 router.get('/logout',function(req,res,next){
   req.session.loggedin = false
   req.session.user = undefined
