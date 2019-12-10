@@ -29,4 +29,50 @@ router.get('/detail/:orderNumber', function(req, res, next) {
     })
 })
 
+router.get('/delete/:pcode', function(req, res, next) {
+    var pcode = req.params.pcode
+    Database.query(`delete from products where productCode = '${pcode}'`)
+})
+
+router.get('/addproduct/:pcode/:pname/:pdesc/:pline/:pscale/:pvendor/:pquan/:pbuyprice/:pmsrp',
+    function(req, res, next) {
+        var pcode = req.params.pcode
+        var pname = req.params.pname
+        var pdesc = req.params.pdesc
+        var pline = req.params.pline
+        var pscale = req.params.pscale
+        var pvendor = req.params.pvendor
+        var pquan = req.params.pquan
+        var pbuyprice = req.params.pbuyprice
+        var pmsrp = req.params.pmsrp
+        console.log(pline);
+        Database.query(`insert into products (productCode,productName,productLine,productScale,productVendor,productDescription,quantityInStock,buyPrice,MSRP) 
+        VALUES ('${pcode}','${pname}','${pline}','${pscale}','${pvendor}','${pdesc}',${pquan},${pbuyprice},${pmsrp})`)
+    })
+
+router.get('/update/:pcode/:pname/:pdesc/:pline/:pscale/:pvendor/:pquan/:pbuyprice/:pmsrp',
+    function(req, res, next) {
+        var pcode = req.params.pcode
+        var pname = req.params.pname
+        var pdesc = req.params.pdesc
+        var pline = req.params.pline
+        var pscale = req.params.pscale
+        var pvendor = req.params.pvendor
+        var pquan = req.params.pquan
+        var pbuyprice = req.params.pbuyprice
+        var pmsrp = req.params.pmsrp
+        Database.query(`update products 
+        set productCode = '${pcode}',productName = '${pname}',productLine = '${pline}',productScale='${pscale}',productVendor='${pvendor}',productDescription='${pdesc}',quantityInStock=${pquan},buyPrice=${pbuyprice},MSRP=${pmsrp}
+        where productCode = '${pcode}'`)
+    })
+router.get('/checkout/:cno/:ceque/:required/:amount', function(req, res, next) {
+    var cno = req.params.cno
+    var ceque = req.params.ceque
+    var required = req.params.required
+    var amount = req.params.amount
+    console.log(cno + ' ' + ceque + ' ' + required + ' ' + amount);
+    // Database.query(`insert into (customerNumber,checkNumber,paymentDate,amount)
+    // values ('${cno},${ceque},${required},${amount}')`)
+})
+
 module.exports = router;

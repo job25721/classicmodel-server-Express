@@ -68,8 +68,8 @@ router.post("/addCart", function(req, res, next) {
             req.session.cartItem[targetIndex].Quantity += quantity;
             req.session.cartItem[targetIndex].Total += quantity * req.session.cartItem[targetIndex].Price
         }
-        console.log(req.session.cartItem);
         req.session.totalQuantitiy += quantity
+        console.log(req.session.cartItem);
         res.json(req.session.totalQuantitiy)
     })
 });
@@ -93,6 +93,7 @@ router.delete('/removeCartItem/:code', function(req, res, next) {
 router.get('/getCartItem', function(req, res, next) {
     if (req.session.cartItem === undefined) req.session.cartItem = []
     if (req.session.totalQuantitiy === undefined) req.session.totalQuantitiy = 0
+    console.log(req.session.cartItem);
     res.json({
         cartItem: req.session.cartItem,
         total: req.session.totalQuantitiy
