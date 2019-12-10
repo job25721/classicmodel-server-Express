@@ -15,7 +15,6 @@ router.post('/addDiscount',function(req,res,next){
     console.log(code);
     Database.query(`INSERT INTO discounts(Code, Discount, TotalAmount, Expire) VALUES(${code},${discount},${total},${expire})`, function (err, data, fields) {
         console.log(err);
-        
         res.json(data)
     });
 })
