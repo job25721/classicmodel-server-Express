@@ -16,6 +16,12 @@ router.get("/user", function(req, res, next) {
   }else res.end()
 });
 
+router.get("/user",function(req,res,next)){
+  if(req.session.user != undefined){
+    Database.query('SELECT')
+  }
+}
+
 router.get("/authenCheck",function (req,res,next) {
   if(req.session.loggedin) res.json({"login":true})
   else res.json({"login":false})
@@ -57,6 +63,9 @@ router.get('/logout',function(req,res,next){
   req.session.user = undefined
   res.end()
 })
+
+// Customer Fetch
+
 
 
 
