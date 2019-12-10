@@ -60,16 +60,16 @@ router.get('/product/:scale/:vendor/:name', function(req, res, next) {
     var vendor = req.params.vendor
     var name = req.params.name
     var filter = ""
-    if (name == "undefined") {
+    if (name == "All") {
         if (scale == "All" && vendor == "All") filter = ""
         else if (scale == "All" && vendor != "All") filter = 'where productVendor = "' + vendor + '"'
         else if (scale != "All" && vendor == "All") filter = 'where productScale = "' + scale + '"'
         else filter = 'where productScale = "' + scale + '" and productVendor="' + vendor + '"'
     } else {
-        if (scale == "All" && vendor == "All") filter = 'where productName="' + name + '"'
-        else if (scale == "All" && vendor != "All") filter = 'where productVendor = "' + vendor + '"and productName="' + name + '"'
-        else if (scale != "All" && vendor == "All") filter = 'where productScale = "' + scale + '"and productName="' + name + '"'
-        else filter = 'where productScale = "' + scale + '" and productVendor="' + vendor + '"and productName="' + name + '"'
+        if (scale == "All" && vendor == "All") filter = 'where productName like "' + name + '%"'
+        else if (scale == "All" && vendor != "All") filter = 'where productVendor = "' + vendor + '"and productName like "%' + name + '%"'
+        else if (scale != "All" && vendor == "All") filter = 'where productScale = "' + scale + '"and productName like "%' + name + '%"'
+        else filter = 'where productScale = "' + scale + '" and productVendor="' + vendor + '"and productName like "%' + name + '%"'
     }
     Database.query(`select * from products join productlines USING (productLine) ${filter} `, function(err, result, fields) {
         res.json({
