@@ -65,14 +65,49 @@ router.get('/update/:pcode/:pname/:pdesc/:pline/:pscale/:pvendor/:pquan/:pbuypri
         set productCode = '${pcode}',productName = '${pname}',productLine = '${pline}',productScale='${pscale}',productVendor='${pvendor}',productDescription='${pdesc}',quantityInStock=${pquan},buyPrice=${pbuyprice},MSRP=${pmsrp}
         where productCode = '${pcode}'`)
     })
-router.get('/checkout/:cno/:ceque/:required/:amount', function(req, res, next) {
+router.get('/payment/:amount/:cno/:ceque', function(req, res, next) {
     var cno = req.params.cno
     var ceque = req.params.ceque
-    var required = req.params.required
     var amount = req.params.amount
-    console.log(cno + ' ' + ceque + ' ' + required + ' ' + amount);
-    // Database.query(`insert into (customerNumber,checkNumber,paymentDate,amount)
-    // values ('${cno},${ceque},${required},${amount}')`)
+    if (ceque == 'No ceque') ceque = null
+    Database.query(`insert into payments(customerNumber,checkNumber,paymentDate,amount)
+    values (${cno},'${ceque}',CURRENT_TIMESTAMP,${amount})`)
+})
+
+router.get('/checkout/:reqdate/:cno/:orderno', function(req, res, next) {
+    var reqdate = req.params.reqdate
+    var cno = req.params.cno
+    var orderno = req.params.orderno
+    if (reqdate == "null") {
+        Database.query(`insert into orders(orderNumber,orderDate,requiredDate,shippedDate,status,comments,customerNumber)
+        values (${orderno},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP+1,null,"In Process",null,${cno})`, function(err, data) {
+            res.json(data)
+        })
+    } else {
+        Database.query(`insert into orders(orderNumber,orderDate,requiredDate,shippedDate,status,comments,customerNumber)
+        values (${orderno},CURRENT_TIMESTAMP,"${reqdate}",null,"In Process",null,${cno})`, function(err, data) {
+            res.json(data)
+        })
+    }
+
+})
+
+router.get('/getorderNo', function(req, res, next) {
+    Database.query(`select max(orderNumber) as orderNo from orders`, function(err, data) {
+        res.json(data)
+    })
+})
+
+router.get('/detail/insert/:orderno/:code/:quantity/:price/:i', function(req, res, next) {
+    var orderno = req.params.orderno
+    var pcode = req.params.code
+    var quan = req.params.quantity
+    var price = req.params.price
+    var i = req.params.i
+    console.log("im " + quan);
+    Database.query(`insert into orderdetails(orderNumber,productCode,quantityOrdered,priceEach,orderLineNumber)
+    values (${orderno},'${pcode}',${quan},${price},${i})`)
+    Database.query(`update products set quantityInStock = quantityInStock-${quan} where productCode = '${pcode}'`)
 })
 
 module.exports = router;
