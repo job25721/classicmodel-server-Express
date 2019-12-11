@@ -89,7 +89,8 @@ router.post("/addCart", function(req, res, next) {
                 Name: data[0].productName,
                 Quantity: quantity,
                 Price: data[0].buyPrice,
-                Total: quantity * data[0].buyPrice
+                Total: quantity * data[0].buyPrice,
+                thisquan: data[0].quantityInStock
             }
             req.session.cartItem.push(myJSON)
         } else {
