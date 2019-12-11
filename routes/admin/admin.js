@@ -8,5 +8,5 @@ router.use('/discount', require('./discount'))
 router.use('/product', require('./product'))
 router.use('/order', require('./order'))
 router.use('/customer', require('./customer'))
-
+router.use('/discount1', require('./discount1'))
 module.exports = router;
