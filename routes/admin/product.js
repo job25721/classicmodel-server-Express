@@ -13,8 +13,9 @@ router.get("/fetchInstockitem/:id", function(req, res, next) {
 
 router.get("/changepage/:init", function(req, res, next) {
     Database.query(
-        `select * from products as p , productlines as pl where p.productLine = pl.productLine limit ${req.params.init},15`,
+        `select * from products as p , productlines as pl where p.productLine = pl.productLine and quantityInStock <> 0 limit ${req.params.init},15`,
         function(err, data) {
+            console.log(`select * from products as p , productlines as pl where p.productLine = pl.productLine where quantityInStock <> 0 limit ${req.params.init},15`);
             res.json(data);
         }
     );
@@ -22,7 +23,7 @@ router.get("/changepage/:init", function(req, res, next) {
 
 router.get("/instockItem", function(req, res, next) {
     Database.query(
-        "SELECT * FROM products join productlines using (productLine)",
+        "SELECT * FROM products join productlines using (productLine) where quantityInStock <> 0",
         function(err, productData, fields) {
             res.json(productData);
         }
@@ -31,12 +32,14 @@ router.get("/instockItem", function(req, res, next) {
 
 router.get("/count", function(req, res, next) {
     Database.query(
-        "SELECT count(*) as count  FROM products join productlines using (productLine)",
+        "SELECT count(*) as count  FROM products join productlines using (productLine) where quantityInStock <> 0",
         function(err, productData, fields) {
             res.json(productData);
         }
     );
 });
+
+
 
 router.post("/addCart", function(req, res, next) {
     var quantity = parseInt(req.body.quantity);

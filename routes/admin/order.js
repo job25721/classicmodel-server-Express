@@ -109,4 +109,10 @@ router.get('/detail/insert/:orderno/:code/:quantity/:price/:i', function(req, re
     Database.query(`update products set quantityInStock = quantityInStock-${quan} where productCode = '${pcode}'`)
 })
 
+router.get('/getpoint/:cno/:point', function(req, res, next) {
+    var cno = req.params.cno
+    var point = req.params.point
+    Database.query(`update customers set totalPoint = totalPoint + ${point} where customerNumber = ${cno}`)
+})
+
 module.exports = router;

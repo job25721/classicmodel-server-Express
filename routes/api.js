@@ -5,51 +5,50 @@ var bcrypt = require("bcryptjs");
 
 
 
-router.use('/admin',require('./admin/admin'))
+router.use('/admin', require('./admin/admin'))
 
 router.get("/user", function(req, res, next) {
-  if (req.session.user != undefined) {
-    Database.query(`SELECT firstName,lastName,jobTitle FROM employees WHERE employeeNumber = ${parseInt(req.session.user)}`,(err, data) => {
-        res.json(data);
-      }
-    );
-  }else res.end()
+    if (req.session.user != undefined) {
+        Database.query(`SELECT firstName,lastName,jobTitle FROM employees WHERE employeeNumber = ${parseInt(req.session.user)}`, (err, data) => {
+            res.json(data);
+        });
+    } else res.end()
 });
-router.get("/authenCheck",function (req,res,next) {
-  if(req.session.loggedin) res.json({"login":true})
-  else res.json({"login":false})
+router.get("/authenCheck", function(req, res, next) {
+    if (req.session.loggedin) res.json({ "login": true })
+    else res.json({ "login": false })
 })
 
 router.post("/auth", function(req, res, next) {
-  var { username, password } = req.body.user;
-   
-  Database.query(
-    "SELECT pswd FROM users WHERE employeeNumber = " + parseInt(username),
-    (err, data) => {
-      if (data.length > 0) {
-        bcrypt.compare(password.toString(), data[0].pswd, function(
-          err,
-          compared
-        ) {
-          if (compared) {
-            req.session.loggedin = true;
-            req.session.user = username;
-            console.log(req.session);
+    var { username, password } = req.body.user;
 
-            res.json({ falied: false, worked: true });
-          } else {
-            req.session.loggedin = false;
-            req.session.user = null;
-            res.json({ failed: true, worked: true });
-          }
-        });
-      } else {
-        req.session.loggedin = false;
-        req.session.user = null;
-        res.json({ failed: true, worked: false });
-      }
-    }
-  );
+    Database.query(
+        "SELECT pswd FROM users WHERE employeeNumber = " + parseInt(username),
+        (err, data) => {
+            if (data.length > 0) {
+                bcrypt.compare(password.toString(), data[0].pswd, function(
+                    err,
+                    compared
+                ) {
+                    if (compared) {
+                        req.session.loggedin = true;
+                        req.session.user = username;
+                        console.log(req.session);
+
+                        res.json({ falied: false, worked: true });
+                    } else {
+                        req.session.loggedin = false;
+                        req.session.user = null;
+                        res.json({ failed: true, worked: true });
+                    }
+                });
+            } else {
+                req.session.loggedin = false;
+                req.session.user = null;
+                res.json({ failed: true, worked: false });
+            }
+        }
+    );
 });
 
 
@@ -60,10 +59,16 @@ router.get('/logout',function(req,res,next){
   res.end()
 })
 
-router.delete('/destroySession',function(req,res,next){
+router.delete('/destroyInstockCart',function(req,res,next){
   req.session.cartItem = undefined;
   req.session.totalQuantitiy = undefined;
   res.send('your payment is accepted!!')
+})
+
+router.delete('/destroyPreorderCart',function(req,res,next){
+  req.session.preorderCart = undefined;
+  req.session.totalPreorder = undefined;
+  res.send('your preorder payment is accepted!!')
 })
 
 module.exports = router;
