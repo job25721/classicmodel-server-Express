@@ -34,4 +34,8 @@ router.get('/update/:dcode', function(req, res, next) {
     })
 })
 
+// router.get('/get/:code', function(req, res, next) {
+//     var code = req.params.code
+//     console.log("code " + code);
+// })
 module.exports = router;
