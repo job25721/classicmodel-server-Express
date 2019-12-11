@@ -63,7 +63,7 @@ router.get('/update/:pcode/:pname/:pdesc/:pline/:pscale/:pvendor/:pquan/:pbuypri
         Database.query(`update products 
         set productCode = '${pcode}',productName = '${pname}',productLine = '${pline}',productScale='${pscale}',productVendor='${pvendor}',productDescription='${pdesc}',quantityInStock=${pquan},buyPrice=${pbuyprice},MSRP=${pmsrp}
         where productCode = '${pcode}'`)
-    })
+})
 router.get('/payment/:amount/:cno/:ceque', function(req, res, next) {
     var cno = req.params.cno
     var ceque = req.params.ceque

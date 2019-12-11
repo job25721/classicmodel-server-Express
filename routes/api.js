@@ -9,7 +9,7 @@ router.use('/admin', require('./admin/admin'))
 
 router.get("/user", function(req, res, next) {
     if (req.session.user != undefined) {
-        Database.query(`SELECT firstName,lastName,jobTitle FROM employees WHERE employeeNumber = ${parseInt(req.session.user)}`, (err, data) => {
+        Database.query(`SELECT firstName,lastName,jobTitle,Role FROM employees WHERE employeeNumber = ${parseInt(req.session.user)}`, (err, data) => {
             res.json(data);
         });
     } else res.end()

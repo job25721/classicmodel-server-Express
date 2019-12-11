@@ -11,8 +11,8 @@ router.get('/employeeData',function(req,res,next){
     var employeeNumber 
     if (req.session.user !== undefined) {
         employeeNumber = parseInt(req.session.user)
-        Database.query(`select * from employees where reportsTo = ${employeeNumber}`, (err, data) => {
-            res.json(data)
+        Database.query(`select * from employees where reportsTo = ${employeeNumber}`, (err, employee) => {
+            res.json(employee)
         })
     } else {
         res.end()
