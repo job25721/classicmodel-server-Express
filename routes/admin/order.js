@@ -116,4 +116,11 @@ router.get('/getpoint/:cno/:point', function(req, res, next) {
     Database.query(`update customers set totalPoint = totalPoint + ${point} where customerNumber = ${cno}`)
 })
 
+router.get('/editdetail/:comment/:orderno', function(req, res, next) {
+    var comment = req.params.comment
+    var orderno = req.params.orderno
+    console.log(comment);
+    Database.query(`update orders set comments = ${comment} where orderNumber = ${orderno}`)
+})
+
 module.exports = router;

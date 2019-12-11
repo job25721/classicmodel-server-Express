@@ -29,7 +29,7 @@ router.delete('/deleteDiscount/:code', function(req, res, next) {
 
 router.get('/update/:dcode', function(req, res, next) {
     var dcode = req.params.dcode
-    Database.query(`update discounts set TotalAmount = 	TotalAmount - 1  where discoutNo = ${dcode}`)
+    Database.query(`update discounts set TotalAmount=TotalAmount-1  where Code = "${dcode}"`)
 })
 
 module.exports = router;
