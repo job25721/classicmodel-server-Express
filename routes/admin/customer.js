@@ -17,9 +17,18 @@ router.get('/changepage/:init', function(req, res, next) {
 
 router.get('/detail/:customerNumber', function(req, res, next) {
     var customerNumber = req.params.customerNumber
-    Database.query(`select * from customers where customerNumber = ${customerNumber}`, function(err, data) {
+    Database.query(`select * from customerswhere customerNumber = ${customerNumber}`, function(err, data) {
         res.json(data)
     })
+})
+
+router.post('/deleteCustomer/:id',function(req,res,next){
+    console.log(req.params.id);
+    var customerNumber = req.params.id
+    Database.query(`Delete  from customers where customerNumber = ${customerNumber}`,(err,data)=>{
+        res.send('ลุงตู่ได้ลบคุณออกจากทะเบียนราษฎรเรียบร้อยแล้ว')
+    })
+
 })
 
 router.post('/addCustomer',function(req,res,next){
