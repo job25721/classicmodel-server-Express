@@ -51,19 +51,12 @@ router.post("/auth", function(req, res, next) {
     );
 });
 
-<<<<<<< HEAD
 
 
 router.get('/logout',function(req,res,next){
   req.session.loggedin = false
   req.session.user = undefined
   res.end()
-=======
-router.get('/logout', function(req, res, next) {
-    req.session.loggedin = false
-    req.session.user = undefined
-    res.end()
->>>>>>> d15a220b2e37545fd9df121ff7fcc8f525f9f05f
 })
 
 router.get('/destroySession', function(req, res, next) {
@@ -71,8 +64,4 @@ router.get('/destroySession', function(req, res, next) {
     req.session.totalQuantitiy = undefined;
 })
 
-<<<<<<< HEAD
-
-=======
->>>>>>> d15a220b2e37545fd9df121ff7fcc8f525f9f05f
 module.exports = router;
