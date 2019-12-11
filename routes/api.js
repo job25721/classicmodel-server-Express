@@ -51,15 +51,24 @@ router.post("/auth", function(req, res, next) {
     );
 });
 
-router.get('/logout', function(req, res, next) {
-    req.session.loggedin = false
-    req.session.user = undefined
-    res.end()
+
+
+router.get('/logout',function(req,res,next){
+  req.session.loggedin = false
+  req.session.user = undefined
+  res.end()
 })
 
-router.get('/destroySession', function(req, res, next) {
-    req.session.cartItem = undefined;
-    req.session.totalQuantitiy = undefined;
+router.delete('/destroyInstockCart',function(req,res,next){
+  req.session.cartItem = undefined;
+  req.session.totalQuantitiy = undefined;
+  res.send('your payment is accepted!!')
+})
+
+router.delete('/destroyPreorderCart',function(req,res,next){
+  req.session.preorderCart = undefined;
+  req.session.totalPreorder = undefined;
+  res.send('your preorder payment is accepted!!')
 })
 
 module.exports = router;

@@ -4,7 +4,6 @@ const Database = require("../../config/database");
 router.get('/fetch', function(req, res, next) {
     Database.query(`select * from orders`, function(err, data) {
         console.log(data.length);
-
         res.json(data)
     })
 })
