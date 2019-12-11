@@ -79,7 +79,7 @@ router.get('/checkout/:reqdate/:cno/:orderno', function(req, res, next) {
     var orderno = req.params.orderno
     if (reqdate == "null") {
         Database.query(`insert into orders(orderNumber,orderDate,requiredDate,shippedDate,status,comments,customerNumber)
-        values (${orderno},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP+1,null,"In Process",null,${cno})`, function(err, data) {
+        values (${orderno},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP+7,null,"In Process",null,${cno})`, function(err, data) {
             res.json(data)
         })
     } else {
@@ -113,6 +113,18 @@ router.get('/getpoint/:cno/:point', function(req, res, next) {
     var cno = req.params.cno
     var point = req.params.point
     Database.query(`update customers set totalPoint = totalPoint + ${point} where customerNumber = ${cno}`)
+})
+
+router.get('/editdetail/:comment/:orderno', function(req, res, next) {
+    var comment = req.params.comment
+    var orderno = req.params.orderno
+    console.log(comment);
+    Database.query(`update orders set comments = "${comment}" where orderNumber = ${orderno}`)
+})
+
+router.get('/setShippedDate/:orderno', function(req, res, next) {
+    var orderno = req.params.orderno
+    Database.query(`update orders set shippedDate = current_timestamp where orderNumber = ${orderno}`)
 })
 
 module.exports = router;
