@@ -60,6 +60,10 @@ router.get('/logout',function(req,res,next){
   res.end()
 })
 
-
+router.delete('/destroySession',function(req,res,next){
+  req.session.cartItem = undefined;
+  req.session.totalQuantitiy = undefined;
+  res.send('your payment is accepted!!')
+})
 
 module.exports = router;
