@@ -16,7 +16,6 @@ router.post('/add',function(req,res,next){
   const id = req.body.user.input;
   const pass = req.body.user.pass;
   console.log(id);
-  
         Database.query('SELECT employeeNumber FROM employees WHERE employeeNumber = ' + id, (err, data) => {
             if (data.length > 0) {
                 Database.query('SELECT employeeNumber FROM users WHERE employeeNumber = ' + id, (err, data2) => {

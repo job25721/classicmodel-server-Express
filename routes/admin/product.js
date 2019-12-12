@@ -12,23 +12,21 @@ router.get("/fetchInstockitem/:id", function(req, res, next) {
 });
 
 router.get("/changepage/:init", function(req, res, next) {
-    Database.query(
-        `select * from products as p , productlines as pl where p.productLine = pl.productLine and quantityInStock <> 0 limit ${req.params.init},15`,
-        function(err, data) {
-            console.log(`select * from products as p , productlines as pl where p.productLine = pl.productLine where quantityInStock <> 0 limit ${req.params.init},15`);
-            res.json(data);
+    Database.query(`select * from employees where employeeNumber = ${req.session.user} and jobTitle like '%Sale%'`,(err,sale)=>{
+        if(sale.length <= 0) res.json({permission : false})
+        else {
+            Database.query(
+                `select * from products as p , productlines as pl where p.productLine = pl.productLine and quantityInStock <> 0 limit ${req.params.init},15`,
+                function(err, data) {
+                    console.log(`select * from products as p , productlines as pl where p.productLine = pl.productLine where quantityInStock <> 0 limit ${req.params.init},15`);
+                    res.json(data);
+                }
+            );
         }
-    );
+    })
+   
 });
 
-router.get("/instockItem", function(req, res, next) {
-    Database.query(
-        "SELECT * FROM products join productlines using (productLine) where quantityInStock <> 0",
-        function(err, productData, fields) {
-            res.json(productData);
-        }
-    );
-});
 
 router.get("/count", function(req, res, next) {
     Database.query(

@@ -9,7 +9,7 @@ router.use('/admin', require('./admin/admin'))
 
 router.get("/user", function(req, res, next) {
     if (req.session.user != undefined) {
-        Database.query(`SELECT firstName,lastName,jobTitle,Role FROM employees WHERE employeeNumber = ${parseInt(req.session.user)}`, (err, data) => {
+        Database.query(`SELECT * FROM employees WHERE employeeNumber = ${parseInt(req.session.user)}`, (err, data) => {
             res.json(data);
         });
     } else res.end()
@@ -55,19 +55,24 @@ router.post("/auth", function(req, res, next) {
 
 router.get('/logout',function(req,res,next){
   req.session.loggedin = false
-  req.session.user = undefined
+  delete req.session.user
+  delete req.session.cartItem
+  delete req.session.totalQuantitiy
+  delete req.session.preorderCart
+  delete req.session.totalPreorder
   res.end()
 })
 
 router.delete('/destroyInstockCart',function(req,res,next){
-  req.session.cartItem = undefined;
-  req.session.totalQuantitiy = undefined;
+  delete req.session.cartItem
+  delete req.session.totalQuantitiy
   res.send('your payment is accepted!!')
 })
 
 router.delete('/destroyPreorderCart',function(req,res,next){
-  req.session.preorderCart = undefined;
-  req.session.totalPreorder = undefined;
+  delete req.session.preorderCart
+  delete req.session.totalPreorder
+  console.log("This is pre cart = " + req.session.preorderCart);
   res.send('your preorder payment is accepted!!')
 })
 

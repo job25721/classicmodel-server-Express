@@ -4,14 +4,14 @@ const Database = require("../../config/database");
 router.get('/fetch', function(req, res, next) {
     Database.query(`select * from customers where salesRepEmployeeNumber = ${req.session.user}`, function(err, data) {
         if(data.length > 0) {
-            console.log(data);
-            console.log(req.session.user);
-            
-            
             res.json(data)
         }
-        else res.json({permission : false})
-        
+        else{
+            Database.query(`select * from employees where employeeNumber = ${req.session.user} and jobTitle like '%Sale%'`,(err,sale)=>{
+                if(sale.length <= 0) res.json({permission : false})
+                else res.end()
+            })
+        }
     })
 })
 
@@ -29,11 +29,12 @@ router.get('/detail/:customerNumber', function(req, res, next) {
     })
 })
 
-router.post('/deleteCustomer/:id',function(req,res,next){
+router.get('/deleteCustomer/:id',function(req,res,next){
     console.log(req.params.id);
     var customerNumber = req.params.id
-    Database.query(`Delete  from customers where customerNumber = ${customerNumber}`,(err,data)=>{
-        res.send('ลุงตู่ได้ลบคุณออกจากทะเบียนราษฎรเรียบร้อยแล้ว')
+    Database.query(`Delete from customers where customerNumber = ${customerNumber}`,(err,data)=>{
+        console.log(err);
+        res.send('Deleted')
     })
 
 })

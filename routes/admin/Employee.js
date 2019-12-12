@@ -12,20 +12,14 @@ router.get('/employeeData',function(req,res,next){
     if (req.session.user !== undefined) {
         employeeNumber = parseInt(req.session.user)
         Database.query(`select * from employees where reportsTo = ${employeeNumber}`, (err, employee) => {
-            res.json(employee)
+            if(employee.length > 0) res.json(employee)
+            else res.json({permission:false})
         })
     } else {
         res.end()
     }
 })
 
-router.get('/edit/:id',function (req,res,next) {
-    req.session.editSESSION = req.params.id
-        Database.query(`select * from employees where employeeNumber = ${req.session.editSESSION}` , (err, data) => {
-            if (data.length > 0)
-                res.json(data)
-    })
-})
 
 router.post('/promote/:id',function(req,res,next){
     const employeeNumber = req.params.id;
@@ -34,7 +28,7 @@ router.post('/promote/:id',function(req,res,next){
             let promotedRole = parseInt(employee[0].Role) + 1  
             let SupervisorID = parseInt(employee[0].reportsTo)
             var updatedJob = ''
-            if(promotedRole == 4) res.send("you can't become to president");
+            if(promotedRole == 4) res.send("can't become to the president");
             else{
                  //if promote represent to supervisee
                  //select supervisor to compare
@@ -55,15 +49,12 @@ router.post('/promote/:id',function(req,res,next){
                             }
                             
                             
-                        }else if(promotedRole >= supervise[0].Role) res.send("you can't go higer anymore")
+                        }else if(promotedRole >= supervise[0].Role) res.send("can't go higer anymore")
                     }
                 })
             }
         }
-    })
-
-
-    
+    })  
 })
 
 router.post('/demote/:id',function(req,res,next){
@@ -72,7 +63,7 @@ router.post('/demote/:id',function(req,res,next){
         if(employee.length > 0 ) {
             let demotedRole = parseInt(employee[0].Role) - 1  
             var updatedJob = ''
-            if(demotedRole < 1) res.send("you can't demote anymore")
+            if(demotedRole < 1) res.send("can't demote anymore")
             else{
                 updatedJob = map(demotedRole);
                 Database.query(`update employees set jobTitle = '${updatedJob}',Role = ${demotedRole} where employeeNumber = ${employeeNumber}`)
