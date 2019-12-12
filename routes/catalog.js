@@ -30,6 +30,16 @@ router.get('/allproduct', function(req, res, next) {
     })
 })
 
+router.get('/preorder', function(req, res, next) {
+
+    Database.query(`select * from products join productlines USING (productLine) where quantityInStock = 0`, function(err, result, fields) {
+        res.json({
+            result: result,
+            row: result.length
+        })
+    })
+})
+
 router.get('/test/:scale/:vendor/:name/:init', function(req, res, next) {
     var scale = req.params.scale
     var vendor = req.params.vendor

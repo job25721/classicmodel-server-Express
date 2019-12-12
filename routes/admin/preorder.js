@@ -1,6 +1,14 @@
 const router = require('express').Router()
 const Database = require('../../config/database')
 
+
+router.get('/fetch', function(req, res, next) {
+    Database.query(`select * from preorders`, function(err, data) {
+        console.log(data.length);
+        res.json(data)
+    })
+})
+
 router.get("/changepage/:init", function(req, res, next) {
     Database.query(
         `select * from products as p , productlines as pl where p.productLine = pl.productLine and quantityInStock = 0 limit ${req.params.init},15`,
@@ -9,7 +17,6 @@ router.get("/changepage/:init", function(req, res, next) {
         }
     );
 });
-
 
 
 router.get("/count", function(req, res, next) {
@@ -85,6 +92,30 @@ router.get('/getCartItem', function(req, res, next) {
     })
 })
 
+router.get('/update/:value/:orderNumber', function(req, res, next) {
+    var value = req.params.value
+    var orderNumber = req.params.orderNumber
+    Database.query(`update preorders set status="${value}" where orderNumber=${orderNumber}`)
+})
+
+router.get('/setShippedDate/:orderno', function(req, res, next) {
+    var orderno = req.params.orderno
+    Database.query(`update preorders set shippedDate = current_timestamp where orderNumber = ${orderno}`)
+})
+
+router.get('/detail/:orderNumber', function(req, res, next) {
+    var orderNumber = req.params.orderNumber
+    Database.query(`select * from preorders join preorderdetails using (orderNumber) where orderNumber = ${orderNumber}`, function(err, data) {
+        res.json(data)
+    })
+})
+
+router.get('/editdetail/:comment/:orderno', function(req, res, next) {
+    var comment = req.params.comment
+    var orderno = req.params.orderno
+    console.log(comment);
+    Database.query(`update preorders set comments = "${comment}" where orderNumber = ${orderno}`)
+})
 
 
 module.exports = router;
