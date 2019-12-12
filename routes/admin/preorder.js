@@ -2,18 +2,12 @@ const router = require('express').Router()
 const Database = require('../../config/database')
 
 router.get("/changepage/:init", function(req, res, next) {
-    Database.query(`select * from employees where employeeNumber = ${req.session.user} and jobTitle like '%Sale%'`,(err,sale)=>{
-        if(sale.length <= 0) res.json({permission : false})
-        else {
-            Database.query(
-                `select * from products as p , productlines as pl where p.productLine = pl.productLine and quantityInStock = 0 limit ${req.params.init},15`,
-                function(err, data) {
-                    res.json(data);
-                }
-            );
+    Database.query(
+        `select * from products as p , productlines as pl where p.productLine = pl.productLine and quantityInStock = 0 limit ${req.params.init},15`,
+        function(err, data) {
+            res.json(data);
         }
-    })
-   
+    );
 });
 
 

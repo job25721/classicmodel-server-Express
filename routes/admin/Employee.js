@@ -6,7 +6,12 @@ function map(Role){
     else if(Role == 2) return "Sale Manager"
     else if(Role == 3) return "VP Sales"
 }
-
+router.get('/saleTilteCheck',function(req,res,next){
+    Database.query(`select * from employees where employeeNumber = ${req.session.user} and jobTitle like '%Sale%'`,(err,sale)=>{
+        if(sale.length <= 0) res.json({permission : false})
+        else res.json({permission : true})
+    })
+})
 router.get('/employeeData',function(req,res,next){    
     var employeeNumber 
     if (req.session.user !== undefined) {
