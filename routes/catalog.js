@@ -40,6 +40,31 @@ router.get('/preorder', function(req, res, next) {
     })
 })
 
+router.get('/preorder/test/:scale/:vendor/:name/:init', function(req, res, next) {
+    var scale = req.params.scale
+    var vendor = req.params.vendor
+    var name = req.params.name
+    var init = req.params.init
+    var filter = ""
+    if (name == "undefined") {
+        if (scale == "All" && vendor == "All") filter = "where quantityInStock = 0"
+        else if (scale == "All" && vendor != "All") filter = 'where productVendor = "' + vendor + '" and quantityInStock = 0'
+        else if (scale != "All" && vendor == "All") filter = 'where productScale = "' + scale + '" and quantityInStock = 0'
+        else filter = 'where productScale = "' + scale + '" and productVendor="' + vendor + '" and quantityInStock = 0'
+    } else {
+        if (scale == "All" && vendor == "All") filter = 'where productName="' + name + '" and quantityInStock = 0'
+        else if (scale == "All" && vendor != "All") filter = 'where productVendor = "' + vendor + '"and productName="' + name + '" and quantityInStock = 0'
+        else if (scale != "All" && vendor == "All") filter = 'where productScale = "' + scale + '"and productName="' + name + '" and quantityInStock = 0'
+        else filter = 'where productScale = "' + scale + '" and productVendor="' + vendor + '"and productName="' + name + '" and quantityInStock = 0'
+    }
+    Database.query(`select * from products join productlines USING (productLine) ${filter} limit ${init},18`, function(err, result, fields) {
+        res.json({
+            result: result,
+            row: result.length
+        })
+    })
+})
+
 router.get('/test/:scale/:vendor/:name/:init', function(req, res, next) {
     var scale = req.params.scale
     var vendor = req.params.vendor
@@ -80,6 +105,30 @@ router.get('/product/:scale/:vendor/:name', function(req, res, next) {
         else if (scale == "All" && vendor != "All") filter = 'where productVendor = "' + vendor + '"and productName like "%' + name + '%"'
         else if (scale != "All" && vendor == "All") filter = 'where productScale = "' + scale + '"and productName like "%' + name + '%"'
         else filter = 'where productScale = "' + scale + '" and productVendor="' + vendor + '"and productName like "%' + name + '%"'
+    }
+    Database.query(`select * from products join productlines USING (productLine) ${filter} `, function(err, result, fields) {
+        res.json({
+            result: result,
+            row: result.length
+        })
+    })
+})
+
+router.get('/product/preorder/:scale/:vendor/:name', function(req, res, next) {
+    var scale = req.params.scale
+    var vendor = req.params.vendor
+    var name = req.params.name
+    var filter = ""
+    if (name == "All") {
+        if (scale == "All" && vendor == "All") filter = "where quantityInStock = 0"
+        else if (scale == "All" && vendor != "All") filter = 'where productVendor = "' + vendor + '" and quantityInStock = 0'
+        else if (scale != "All" && vendor == "All") filter = 'where productScale = "' + scale + '" and quantityInStock = 0'
+        else filter = 'where productScale = "' + scale + '" and productVendor="' + vendor + '" and quantityInStock = 0'
+    } else {
+        if (scale == "All" && vendor == "All") filter = 'where productName like "' + name + '%" and quantityInStock = 0'
+        else if (scale == "All" && vendor != "All") filter = 'where productVendor = "' + vendor + '"and productName like "%' + name + '%" and quantityInStock = 0'
+        else if (scale != "All" && vendor == "All") filter = 'where productScale = "' + scale + '"and productName like "%' + name + '%" and quantityInStock = 0'
+        else filter = 'where productScale = "' + scale + '" and productVendor="' + vendor + '"and productName like "%' + name + '%" and quantityInStock = 0'
     }
     Database.query(`select * from products join productlines USING (productLine) ${filter} `, function(err, result, fields) {
         res.json({
